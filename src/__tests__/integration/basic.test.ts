@@ -1,55 +1,93 @@
 import { describe, test, expect } from 'vitest'
-import { convertPrismaToTbls } from '../../index.js'
+import { convertDMMFToTblsJSON } from '../../index.js'
+import type { DMMF } from '@prisma/generator-helper'
 
-describe('Basic Prisma to tbls conversion', () => {
-  test('should convert a simple Prisma schema', async () => {
-    const prismaSchema = `
-model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
-  posts Post[]
-}
+describe('Basic DMMF to tbls conversion', () => {
+  test('should convert a simple DMMF datamodel', () => {
+    const mockDMMF: DMMF.Datamodel = {
+      models: [
+        {
+          name: 'User',
+          dbName: null,
+          schema: null,
+          fields: [
+            {
+              name: 'id',
+              type: 'Int',
+              kind: 'scalar',
+              isRequired: true,
+              isList: false,
+              isUnique: false,
+              isId: true,
+              isReadOnly: false,
+              hasDefaultValue: true,
+              default: { name: 'autoincrement', args: [] },
+              relationName: undefined,
+              relationFromFields: undefined,
+              relationToFields: undefined,
+              documentation: undefined
+            },
+            {
+              name: 'email',
+              type: 'String',
+              kind: 'scalar',
+              isRequired: true,
+              isList: false,
+              isUnique: true,
+              isId: false,
+              isReadOnly: false,
+              hasDefaultValue: false,
+              relationName: undefined,
+              relationFromFields: undefined,
+              relationToFields: undefined,
+              documentation: undefined
+            }
+          ],
+          primaryKey: null,
+          uniqueFields: [],
+          uniqueIndexes: [],
+          documentation: undefined
+        }
+      ],
+      enums: [
+        {
+          name: 'Status',
+          values: [
+            { name: 'DRAFT', documentation: undefined, dbName: null },
+            { name: 'PUBLISHED', documentation: undefined, dbName: null }
+          ],
+          dbName: null,
+          documentation: undefined
+        }
+      ],
+      types: []
+    }
 
-model Post {
-  id       Int    @id @default(autoincrement())
-  title    String
-  content  String?
-  authorId Int
-  author   User   @relation(fields: [authorId], references: [id])
-}
-
-enum Status {
-  DRAFT
-  PUBLISHED
-}
-`
-
-    const result = await convertPrismaToTbls(prismaSchema)
+    const result = convertDMMFToTblsJSON(mockDMMF)
     
     expect(result).toBeDefined()
-    expect(result.tables).toHaveLength(2)
+    expect(result.tables).toHaveLength(1)
     expect(result.enums).toHaveLength(1)
-    expect(result.relations).toBeDefined()
     
     // Check User table
-    const userTable = result.tables.find(t => t.name === 'user')
-    expect(userTable).toBeDefined()
-    expect(userTable?.columns).toHaveLength(3) // id, email, name
-    
-    // Check Post table
-    const postTable = result.tables.find(t => t.name === 'post')
-    expect(postTable).toBeDefined()
-    expect(postTable?.columns).toHaveLength(4) // id, title, content, authorId
+    const userTable = result.tables[0]
+    expect(userTable.name).toBe('user')
+    expect(userTable.columns).toHaveLength(2) // id, email
     
     // Check Status enum
-    const statusEnum = result.enums?.find(e => e.name === 'status')
-    expect(statusEnum).toBeDefined()
+    const statusEnum = result.enums?.[0]
+    expect(statusEnum?.name).toBe('status')
     expect(statusEnum?.values).toEqual(['DRAFT', 'PUBLISHED'])
   })
   
-  test('should handle empty schema', async () => {
-    const result = await convertPrismaToTbls('')
+  test('should handle empty datamodel', () => {
+    const emptyDMMF: DMMF.Datamodel = {
+      models: [],
+      enums: [],
+      types: []
+    }
+    
+    const result = convertDMMFToTblsJSON(emptyDMMF)
     
     expect(result).toBeDefined()
     expect(result.tables).toHaveLength(0)

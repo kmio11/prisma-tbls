@@ -1,24 +1,17 @@
-import { parsePrismaSchema } from './parser/prisma.js'
-import { convertSchemaToTbls } from './converter/schema.js'
+import { convertDMMFToTbls } from './converter/dmmf-converter.js'
 import type { TblsSchema } from './types/tbls.js'
+import type { DMMF } from '@prisma/generator-helper'
 
 /**
- * Main entry point for converting Prisma schema to tbls JSON format
- * For standalone CLI usage, we use the custom parser for now.
- * For generator usage, use the DMMF converter directly.
- * @param prismaSchemaContent - The Prisma schema file content as string
- * @returns Promise<TblsSchema> - The converted tbls JSON schema
+ * Convert DMMF to tbls JSON format
+ * This is the main library function for programmatic usage
+ * @param dmmf - DMMF datamodel from @prisma/generator-helper
+ * @returns TblsSchema - The converted tbls JSON schema
  */
-export async function convertPrismaToTbls(prismaSchemaContent: string): Promise<TblsSchema> {
-  // Use custom parser for standalone CLI
-  const prismaAst = parsePrismaSchema(prismaSchemaContent)
-  
-  // Convert to tbls format
-  const tblsSchema = convertSchemaToTbls(prismaAst)
-  
-  return tblsSchema
+export function convertDMMFToTblsJSON(dmmf: DMMF.Datamodel): TblsSchema {
+  return convertDMMFToTbls(dmmf)
 }
 
 // Re-export types for library usage
 export type { TblsSchema } from './types/tbls.js'
-export type { PrismaAst } from './parser/types.js'
+export type { DMMF } from '@prisma/generator-helper'

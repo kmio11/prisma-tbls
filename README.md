@@ -9,29 +9,17 @@ Convert Prisma schema to tbls JSON format for database documentation generation.
 - ✅ Convert Prisma enums to tbls enums
 - ✅ Support for @id, @unique, @default, @map attributes
 - ✅ Automatic snake_case conversion for table/column names
-- ✅ Two usage modes: standalone CLI and Prisma generator
+- ✅ Official Prisma DMMF integration for robust parsing
 
 ## Installation
 
 ```bash
-npm install -g prisma-tbls
+npm install prisma-tbls
 ```
 
 ## Usage
 
-### Method 1: Standalone CLI
-
-Convert a Prisma schema file directly:
-
-```bash
-# Basic usage
-prisma-tbls schema.prisma
-
-# With custom output and pretty formatting
-prisma-tbls schema.prisma -o database.json --pretty --verbose
-```
-
-### Method 2: Prisma Generator
+### Prisma Generator (Recommended)
 
 Add the generator to your `schema.prisma`:
 
@@ -68,6 +56,19 @@ Then run:
 npx prisma generate
 ```
 
+### Programmatic Usage
+
+```typescript
+import { convertDMMFToTblsJSON } from 'prisma-tbls'
+import type { DMMF } from '@prisma/generator-helper'
+
+// From generator context
+export const onGenerate = async (options: GeneratorOptions) => {
+  const tblsSchema = convertDMMFToTblsJSON(options.dmmf.datamodel)
+  // Write or process tblsSchema...
+}
+```
+
 ## Output Format
 
 The tool generates tbls-compatible JSON that can be used with [tbls](https://github.com/k1LoW/tbls) for documentation:
@@ -75,7 +76,7 @@ The tool generates tbls-compatible JSON that can be used with [tbls](https://git
 ```json
 {
   "name": "Database Schema",
-  "desc": "Generated from Prisma schema",
+  "desc": "Generated from Prisma schema using @prisma/generator-helper",
   "tables": [
     {
       "name": "user",
@@ -102,23 +103,6 @@ The tool generates tbls-compatible JSON that can be used with [tbls](https://git
   "relations": [...],
   "enums": [...]
 }
-```
-
-## CLI Options
-
-```
-Usage: prisma-tbls [options] <input>
-
-Convert Prisma schema to tbls JSON format for database documentation
-
-Arguments:
-  input                    Path to Prisma schema file
-
-Options:
-  -o, --output <path>      Output file path for tbls JSON (default: "schema.json")
-  -p, --pretty             Pretty print JSON output (default: false)
-  -v, --verbose            Verbose logging (default: false)
-  -h, --help               display help for command
 ```
 
 ## Supported Prisma Features
