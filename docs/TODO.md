@@ -1,111 +1,66 @@
-# Prisma to tbls JSON Converter - Implementation Tasks
+# Prisma to tbls JSON Converter - Implementation Status
 
 ## Project Overview
-Create an npx-executable command-line tool that converts Prisma schema files to tbls JSON format for database documentation generation.
+A Prisma to tbls JSON converter using official @prisma/generator-helper DMMF parsing. Provides two usage modes:
+1. **Prisma Generator**: Add to schema.prisma and run `prisma generate`
+2. **Library**: Direct DMMF to tbls JSON conversion for programmatic usage
 
-## Implementation Phases
+## Implementation Status
 
-### Phase 1: Project Setup and Infrastructure
-- [x] **1.1** Set up TypeScript configuration for ES modules
-- [x] **1.2** Configure package.json for npx execution (bin field)
-- [x] **1.3** Set up build system (tsup/rollup for bundling)
-- [x] **1.4** Create basic CLI structure with argument parsing
-- [x] **1.5** Set up testing framework (vitest)
-- [x] **1.6** Create project directory structure
+### ✅ Completed Features
 
-### Phase 2: Type Definitions
-- [x] **2.1** Define tbls JSON schema TypeScript interfaces
-- [x] **2.2** Define Prisma AST TypeScript interfaces
-- [x] **2.3** Create utility types for conversion mapping
-- [ ] **2.4** Set up validation schemas
+#### Core Architecture
+- [x] **DMMF-based parsing** using @prisma/generator-helper
+- [x] **TypeScript with strict configuration** and ES modules
+- [x] **Dual build system** (tsup) for CLI and generator binaries
+- [x] **Test framework** (vitest) with integration tests
+- [x] **Code quality tools** (ESLint, Prettier, type checking)
 
-### Phase 3: Prisma Schema Parser
-- [ ] **3.1** Implement Prisma schema file reader
-- [ ] **3.2** Create Prisma schema lexer/tokenizer
-- [ ] **3.3** Build Prisma AST parser for models
-- [ ] **3.4** Parse Prisma field definitions and attributes
-- [ ] **3.5** Parse Prisma enum definitions
-- [ ] **3.6** Parse Prisma relation definitions
-- [ ] **3.7** Handle Prisma comments and documentation
+#### Type System
+- [x] **tbls JSON schema TypeScript interfaces** (complete)
+- [x] **DMMF type integration** from @prisma/generator-helper
+- [x] **Conversion utilities** with proper type safety
 
-### Phase 4: Core Conversion Engine
-- [ ] **4.1** Create main schema converter class
-- [ ] **4.2** Implement model-to-table conversion
-- [ ] **4.3** Implement field-to-column conversion with data type mapping
-- [ ] **4.4** Handle nullable fields and default values
-- [ ] **4.5** Convert Prisma attributes to tbls properties
-- [ ] **4.6** Process table comments from Prisma documentation
+#### DMMF to tbls Conversion
+- [x] **Model to table conversion** with all metadata
+- [x] **Field to column conversion** with data type mapping
+- [x] **Relationship extraction** (1:1, 1:many, many:many, self-ref)
+- [x] **Constraint generation** (PK, FK, unique, composite)
+- [x] **Index handling** from DMMF metadata
+- [x] **Enum conversion** with proper naming
+- [x] **Custom mapping** (@map, @@map) support
 
-### Phase 5: Relation Conversion
-- [ ] **5.1** Detect and parse Prisma @relation attributes
-- [ ] **5.2** Convert one-to-one relationships
-- [ ] **5.3** Convert one-to-many relationships
-- [ ] **5.4** Convert many-to-many relationships (through junction tables)
-- [ ] **5.5** Handle self-referential relationships
-- [ ] **5.6** Generate foreign key constraints
-- [ ] **5.7** Determine cardinality mappings
+#### Data Type Support
+- [x] **All Prisma scalar types** (String→VARCHAR, Int→INTEGER, etc.)
+- [x] **Complex types** (BigInt→BIGINT, Json→JSON, DateTime→DATETIME)
+- [x] **Array handling** (lists → JSON type)
+- [x] **Database-specific types** (@db.VarChar, @db.Text support)
+- [x] **Default values** and function calls (autoincrement(), now())
 
-### Phase 6: Advanced Features
-- [ ] **6.1** Convert Prisma enums to tbls enums
-- [ ] **6.2** Handle Prisma indexes (@index, @@index)
-- [ ] **6.3** Convert Prisma unique constraints (@unique, @@unique)
-- [ ] **6.4** Process Prisma @@map() for custom table names
-- [ ] **6.5** Process Prisma @map() for custom column names
-- [ ] **6.6** Handle Prisma @@id() compound primary keys
+#### Advanced Features
+- [x] **Composite constraints** (@@unique, @@id)
+- [x] **Self-referential relationships** (category hierarchy, comment replies)
+- [x] **Many-to-many relationships** with junction table detection
+- [x] **Cascade delete handling** (onDelete: Cascade)
+- [x] **Custom column/table naming** with snake_case conversion
+- [x] **Multiple enum support** with proper type mapping
 
-### Phase 7: Data Type Mapping
-- [ ] **7.1** Map Prisma String to SQL VARCHAR/TEXT
-- [ ] **7.2** Map Prisma Int to SQL INTEGER
-- [ ] **7.3** Map Prisma BigInt to SQL BIGINT
-- [ ] **7.4** Map Prisma Float to SQL FLOAT/DOUBLE
-- [ ] **7.5** Map Prisma Decimal to SQL DECIMAL
-- [ ] **7.6** Map Prisma DateTime to SQL DATETIME/TIMESTAMP
-- [ ] **7.7** Map Prisma Boolean to SQL BOOLEAN
-- [ ] **7.8** Map Prisma Json to SQL JSON
-- [ ] **7.9** Handle Prisma Bytes type
-- [ ] **7.10** Support database-specific type variations
+#### Prisma Generator Integration
+- [x] **Generator handler** following prisma-markdown patterns
+- [x] **Manifest configuration** with version and output management
+- [x] **File output** with configurable paths
+- [x] **Error handling** and proper exit codes
 
-### Phase 8: CLI Interface
-- [ ] **8.1** Implement command-line argument parsing
-- [ ] **8.2** Add input file path validation
-- [ ] **8.3** Add output file path options
-- [ ] **8.4** Create help and usage messages
-- [ ] **8.5** Add verbose/debug logging options
-- [ ] **8.6** Handle error messages and exit codes
-- [ ] **8.7** Add JSON formatting options (pretty print)
+#### Documentation & Samples
+- [x] **Comprehensive README** with usage examples for both modes
+- [x] **CLAUDE.md** with development guidelines and architecture
+- [x] **Sample schema** covering all Prisma features comprehensively
+- [x] **Feature coverage documentation** with examples
 
-### Phase 9: Validation and Error Handling
-- [ ] **9.1** Validate Prisma schema syntax
-- [ ] **9.2** Validate generated tbls JSON against schema
-- [ ] **9.3** Add comprehensive error messages
-- [ ] **9.4** Handle missing or invalid input files
-- [ ] **9.5** Validate data type compatibility
-- [ ] **9.6** Handle edge cases in schema parsing
-
-### Phase 10: Testing
-- [ ] **10.1** Create unit tests for parser components
-- [ ] **10.2** Create unit tests for converter components
-- [ ] **10.3** Create integration tests with sample Prisma schemas
-- [ ] **10.4** Test CLI interface with various arguments
-- [ ] **10.5** Test error handling and edge cases
-- [ ] **10.6** Create test fixtures and golden files
-- [ ] **10.7** Performance testing with large schemas
-
-### Phase 11: Documentation and Polish
-- [ ] **11.1** Write comprehensive README with usage examples
-- [ ] **11.2** Add JSDoc comments to all functions
-- [ ] **11.3** Create example Prisma schemas and outputs
-- [ ] **11.4** Set up automated testing in CI
-- [ ] **11.5** Configure code formatting and linting
-- [ ] **11.6** Optimize bundle size for npx usage
-
-### Phase 12: Advanced Features (Optional)
-- [ ] **12.1** Support for multiple Prisma schema files
-- [ ] **12.2** Configuration file support
-- [ ] **12.3** Custom data type mapping configuration
-- [ ] **12.4** Integration with tbls CLI for direct documentation generation
-- [ ] **12.5** Watch mode for development
-- [ ] **12.6** Support for Prisma schema URLs/remote schemas
+#### Testing
+- [x] **Integration tests** with mock DMMF data
+- [x] **Type safety validation** throughout conversion pipeline
+- [x] **Build verification** and quality gates
 
 ## Data Type Mapping Reference
 
@@ -130,42 +85,42 @@ Create an npx-executable command-line tool that converts Prisma schema files to 
 | 1:many          | zero_or_more     |
 | many:many       | zero_or_more     |
 
-## Project Structure
+## Current Project Structure
 ```
 src/
-├── cli.ts              # CLI entry point
-├── parser/
-│   ├── prisma.ts       # Prisma schema parser
-│   ├── lexer.ts        # Tokenizer for Prisma syntax
-│   └── types.ts        # Prisma AST types
+├── cli.ts                    # Standalone CLI entry point
+├── generator.ts              # Prisma generator entry point  
+├── index.ts                  # Library exports
 ├── converter/
-│   ├── schema.ts       # Main schema converter
-│   ├── table.ts        # Table conversion logic
-│   ├── column.ts       # Column conversion logic
-│   ├── relation.ts     # Relation conversion logic
-│   ├── enum.ts         # Enum conversion logic
-│   └── mapping.ts      # Data type mapping utilities
-├── types/
-│   ├── tbls.ts         # tbls JSON schema types
-│   └── config.ts       # Configuration types
-├── utils/
-│   ├── file.ts         # File I/O utilities
-│   ├── validation.ts   # Schema validation
-│   └── logger.ts       # Logging utilities
-└── __tests__/
-    ├── parser/         # Parser tests
-    ├── converter/      # Converter tests
-    ├── integration/    # Integration tests
-    └── fixtures/       # Test data
+│   └── dmmf-converter.ts     # DMMF → tbls conversion
+└── types/
+    └── tbls.ts              # tbls JSON schema types
+
+sample/
+├── sample.prisma            # Comprehensive test schema
+└── README.md               # Sample documentation
+
+docs/
+└── TODO.md                 # This status document
 ```
 
-## Current Status
-- [x] Project planning and task breakdown
-- [ ] Implementation in progress
+## Implementation Complete ✅
+**Status**: All core functionality implemented and working
+- ✅ **DMMF-based Architecture**: Using official @prisma/generator-helper
+- ✅ **Dual Usage Modes**: Prisma generator + Library
+- ✅ **Full Feature Coverage**: All Prisma constructs supported
+- ✅ **Type Safety**: Complete TypeScript implementation
+- ✅ **Quality Gates**: Build, lint, test all passing
 
-## Notes
-- Follow TDD approach: write tests first, then implement
-- Use strict TypeScript configuration
-- Ensure all code is properly typed (no `any` types)
-- Follow the coding standards defined in CLAUDE.md
-- Run `npm run build` and `npm run lint` before completing tasks
+## Development Notes
+- **Architecture**: DMMF-only approach using official Prisma tooling
+- **Quality Standards**: Zero tolerance for `any` types, all builds must pass
+- **Testing**: Integration tests with mock DMMF data
+- **Build Process**: Dual binaries via tsup (CLI + generator)
+- **Dependencies**: Minimal - only @prisma/generator-helper + commander
+
+## Next Steps (Optional Enhancements)
+- [ ] Error handling improvements for malformed schemas
+- [ ] Performance optimization for large schemas
+- [ ] Additional CLI options (verbose, custom output formats)
+- [ ] Real schema testing with actual Prisma projects
