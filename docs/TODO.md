@@ -6,17 +6,17 @@ Create an npx-executable command-line tool that converts Prisma schema files to 
 ## Implementation Phases
 
 ### Phase 1: Project Setup and Infrastructure
-- [ ] **1.1** Set up TypeScript configuration for ES modules
-- [ ] **1.2** Configure package.json for npx execution (bin field)
-- [ ] **1.3** Set up build system (tsup/rollup for bundling)
-- [ ] **1.4** Create basic CLI structure with argument parsing
-- [ ] **1.5** Set up testing framework (vitest)
-- [ ] **1.6** Create project directory structure
+- [x] **1.1** Set up TypeScript configuration for ES modules
+- [x] **1.2** Configure package.json for npx execution (bin field)
+- [x] **1.3** Set up build system (tsup/rollup for bundling)
+- [x] **1.4** Create basic CLI structure with argument parsing
+- [x] **1.5** Set up testing framework (vitest)
+- [x] **1.6** Create project directory structure
 
 ### Phase 2: Type Definitions
-- [ ] **2.1** Define tbls JSON schema TypeScript interfaces
-- [ ] **2.2** Define Prisma AST TypeScript interfaces
-- [ ] **2.3** Create utility types for conversion mapping
+- [x] **2.1** Define tbls JSON schema TypeScript interfaces
+- [x] **2.2** Define Prisma AST TypeScript interfaces
+- [x] **2.3** Create utility types for conversion mapping
 - [ ] **2.4** Set up validation schemas
 
 ### Phase 3: Prisma Schema Parser

@@ -1,14 +1,49 @@
 {
   "name": "prisma-tbls",
   "version": "0.0.1",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "description": "Convert Prisma schema to tbls JSON format for database documentation",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "prisma-tbls": "dist/cli.js"
   },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "lint": "eslint src --ext .ts",
+    "format": "prettier --write src",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "prisma",
+    "tbls",
+    "database",
+    "documentation",
+    "schema",
+    "cli"
+  ],
   "author": "",
   "license": "MIT",
-  "description": "",
   "dependencies": {
-    "@prisma/generator-helper": "^6.10.1"
+    "@prisma/generator-helper": "^6.10.1",
+    "commander": "^12.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "eslint": "^9.0.0",
+    "prettier": "^3.0.0",
+    "tsup": "^8.5.0",
+    "typescript": "^5.8.3",
+    "vitest": "^2.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
