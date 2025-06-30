@@ -1,0 +1,239 @@
+generator tbls {
+  provider = "prisma-tbls-generator"
+  output   = "./generated-schema.json"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User management with various constraints
+model User {
+  id          Int       @id @default(autoincrement())
+  email       String    @unique @db.VarChar(255)
+  username    String    @unique @db.VarChar(50) @map("user_name")
+  firstName   String?   @db.VarChar(100) @map("first_name")
+  lastName    String?   @db.VarChar(100) @map("last_name")
+  dateOfBirth DateTime? @map("date_of_birth") @db.Date
+  isActive    Boolean   @default(true) @map("is_active")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  
+  // Relations
+  profile     UserProfile?
+  posts       Post[]
+  comments    Comment[]
+  likes       PostLike[]
+  followers   Follow[] @relation("UserFollowers")
+  following   Follow[] @relation("UserFollowing")
+  uploads     FileUpload[]
+  
+  // Composite unique constraint
+  @@unique([firstName, lastName])
+  @@index([email, isActive])
+  @@map("users")
+}
+
+// One-to-one relationship
+model UserProfile {
+  id        Int     @id @default(autoincrement())
+  userId    Int     @unique @map("user_id")
+  bio       String? @db.Text
+  website   String? @db.VarChar(255)
+  location  String? @db.VarChar(100)
+  avatar    String? @db.VarChar(500)
+  
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("user_profiles")
+}
+
+// Content management
+model Category {
+  id          Int         @id @default(autoincrement())
+  name        String      @unique @db.VarChar(100)
+  slug        String      @unique @db.VarChar(100)
+  description String?     @db.Text
+  color       String?     @db.VarChar(7) // Hex color code
+  parentId    Int?        @map("parent_id")
+  
+  // Self-referential relationship
+  parent      Category?   @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  children    Category[]  @relation("CategoryHierarchy")
+  posts       PostCategory[]
+  
+  @@map("categories")
+}
+
+model Post {
+  id          Int       @id @default(autoincrement())
+  title       String    @db.VarChar(255)
+  slug        String    @unique @db.VarChar(255)
+  content     String?   @db.Text
+  excerpt     String?   @db.VarChar(500)
+  status      PostStatus @default(DRAFT)
+  publishedAt DateTime? @map("published_at")
+  authorId    Int       @map("author_id")
+  viewCount   Int       @default(0) @map("view_count")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  
+  // Relations
+  author      User       @relation(fields: [authorId], references: [id])
+  categories  PostCategory[]
+  comments    Comment[]
+  likes       PostLike[]
+  tags        PostTag[]
+  
+  // Composite index for performance
+  @@index([status, publishedAt])
+  @@index([authorId, createdAt])
+  @@map("posts")
+}
+
+// Many-to-many relationship with additional fields
+model PostCategory {
+  postId     Int      @map("post_id")
+  categoryId Int      @map("category_id")
+  isPrimary  Boolean  @default(false) @map("is_primary")
+  addedAt    DateTime @default(now()) @map("added_at")
+  
+  post       Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  
+  @@id([postId, categoryId])
+  @@map("post_categories")
+}
+
+model Tag {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique @db.VarChar(50)
+  color     String?   @db.VarChar(7)
+  createdAt DateTime  @default(now()) @map("created_at")
+  
+  posts     PostTag[]
+  
+  @@map("tags")
+}
+
+model PostTag {
+  postId Int @map("post_id")
+  tagId  Int @map("tag_id")
+  
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  tag    Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  
+  @@id([postId, tagId])
+  @@map("post_tags")
+}
+
+// Comments with hierarchical structure
+model Comment {
+  id        Int       @id @default(autoincrement())
+  content   String    @db.Text
+  postId    Int       @map("post_id")
+  authorId  Int       @map("author_id")
+  parentId  Int?      @map("parent_id")
+  isEdited  Boolean   @default(false) @map("is_edited")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  
+  // Relations
+  post      Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author    User      @relation(fields: [authorId], references: [id])
+  parent    Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
+  replies   Comment[] @relation("CommentReplies")
+  
+  @@index([postId, createdAt])
+  @@map("comments")
+}
+
+// Like system
+model PostLike {
+  userId    Int      @map("user_id")
+  postId    Int      @map("post_id")
+  likedAt   DateTime @default(now()) @map("liked_at")
+  
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  
+  @@id([userId, postId])
+  @@map("post_likes")
+}
+
+// Follow system
+model Follow {
+  followerId  Int      @map("follower_id")
+  followingId Int      @map("following_id")
+  followedAt  DateTime @default(now()) @map("followed_at")
+  
+  follower    User     @relation("UserFollowers", fields: [followerId], references: [id], onDelete: Cascade)
+  following   User     @relation("UserFollowing", fields: [followingId], references: [id], onDelete: Cascade)
+  
+  @@id([followerId, followingId])
+  @@unique([followerId, followingId])
+  @@map("follows")
+}
+
+// Audit log with JSON data
+model AuditLog {
+  id        String    @id @default(cuid())
+  action    String    @db.VarChar(100)
+  tableName String    @map("table_name") @db.VarChar(100)
+  recordId  String    @map("record_id") @db.VarChar(50)
+  oldData   Json?     @map("old_data")
+  newData   Json?     @map("new_data")
+  userId    Int?      @map("user_id")
+  timestamp DateTime  @default(now())
+  
+  @@index([tableName, recordId])
+  @@index([userId, timestamp])
+  @@map("audit_logs")
+}
+
+// Configuration with various data types
+model SystemConfig {
+  id          Int      @id @default(autoincrement())
+  key         String   @unique @db.VarChar(100)
+  value       String   @db.Text
+  type        ConfigType
+  description String?  @db.Text
+  isSecret    Boolean  @default(false) @map("is_secret")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  
+  @@map("system_configs")
+}
+
+// File storage
+model FileUpload {
+  id          String    @id @default(cuid())
+  filename    String    @db.VarChar(255)
+  originalName String   @map("original_name") @db.VarChar(255)
+  mimeType    String    @map("mime_type") @db.VarChar(100)
+  size        BigInt
+  path        String    @db.VarChar(500)
+  uploadedBy  Int       @map("uploaded_by")
+  uploadedAt  DateTime  @default(now()) @map("uploaded_at")
+  
+  uploader    User      @relation(fields: [uploadedBy], references: [id])
+  
+  @@index([mimeType])
+  @@index([uploadedBy, uploadedAt])
+  @@map("file_uploads")
+}
+
+// Enums
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+  DELETED
+}
+
+enum ConfigType {
+  STRING
+  NUMBER
+  BOOLEAN
+  JSON
+}
