@@ -12,7 +12,7 @@ program
   .option('-o, --output <path>', 'Output file path for tbls JSON', 'schema.json')
   .option('-p, --pretty', 'Pretty print JSON output', false)
   .option('-v, --verbose', 'Verbose logging', false)
-  .action(async (input: string, options: { output: string; pretty: boolean; verbose: boolean }) => {
+  .action(async () => {
     console.error('Standalone CLI mode requires integration with Prisma workflow.')
     console.error('Please use the generator mode instead:')
     console.error('')

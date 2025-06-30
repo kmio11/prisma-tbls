@@ -25,7 +25,7 @@ describe('Basic DMMF to tbls conversion', () => {
               relationName: undefined,
               relationFromFields: undefined,
               relationToFields: undefined,
-              documentation: undefined
+              documentation: undefined,
             },
             {
               name: 'email',
@@ -40,55 +40,55 @@ describe('Basic DMMF to tbls conversion', () => {
               relationName: undefined,
               relationFromFields: undefined,
               relationToFields: undefined,
-              documentation: undefined
-            }
+              documentation: undefined,
+            },
           ],
           primaryKey: null,
           uniqueFields: [],
           uniqueIndexes: [],
-          documentation: undefined
-        }
+          documentation: undefined,
+        },
       ],
       enums: [
         {
           name: 'Status',
           values: [
             { name: 'DRAFT', documentation: undefined, dbName: null },
-            { name: 'PUBLISHED', documentation: undefined, dbName: null }
+            { name: 'PUBLISHED', documentation: undefined, dbName: null },
           ],
           dbName: null,
-          documentation: undefined
-        }
+          documentation: undefined,
+        },
       ],
-      types: []
+      types: [],
     }
 
     const result = convertDMMFToTblsJSON(mockDMMF)
-    
+
     expect(result).toBeDefined()
     expect(result.tables).toHaveLength(1)
     expect(result.enums).toHaveLength(1)
-    
+
     // Check User table
     const userTable = result.tables[0]
     expect(userTable.name).toBe('user')
     expect(userTable.columns).toHaveLength(2) // id, email
-    
+
     // Check Status enum
     const statusEnum = result.enums?.[0]
     expect(statusEnum?.name).toBe('status')
     expect(statusEnum?.values).toEqual(['DRAFT', 'PUBLISHED'])
   })
-  
+
   test('should handle empty datamodel', () => {
     const emptyDMMF: DMMF.Datamodel = {
       models: [],
       enums: [],
-      types: []
+      types: [],
     }
-    
+
     const result = convertDMMFToTblsJSON(emptyDMMF)
-    
+
     expect(result).toBeDefined()
     expect(result.tables).toHaveLength(0)
     expect(result.enums).toHaveLength(0)

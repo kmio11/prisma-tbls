@@ -1,5 +1,5 @@
 import type { DMMF } from '@prisma/generator-helper'
-import type { TblsSchema } from '../types/tbls.js'
+import type { TblsSchema, Constraint, Index, Relation } from '../types/tbls.js'
 
 /**
  * Convert DMMF datamodel directly to tbls JSON format
@@ -12,7 +12,7 @@ export function convertDMMFToTbls(datamodel: DMMF.Datamodel): TblsSchema {
   const tables = datamodel.models.map(model => ({
     name: getTableName(model),
     type: 'table' as const,
-    comment: model.documentation || undefined,
+    comment: model.documentation ?? '',
     columns: model.fields
       .filter(field => field.kind === 'scalar' || field.kind === 'enum')
       .map(field => ({
@@ -20,7 +20,7 @@ export function convertDMMFToTbls(datamodel: DMMF.Datamodel): TblsSchema {
         type: mapFieldTypeToSql(field),
         nullable: !field.isRequired,
         default: getDefaultValue(field),
-        comment: field.documentation || undefined
+        comment: field.documentation ?? '',
       })),
     constraints: generateConstraints(model),
     indexes: generateIndexes(model),
@@ -29,11 +29,11 @@ export function convertDMMFToTbls(datamodel: DMMF.Datamodel): TblsSchema {
   // Convert enums
   const enums = datamodel.enums.map(enumDef => ({
     name: getEnumName(enumDef),
-    values: enumDef.values.map(value => value.name)
+    values: enumDef.values.map(value => value.name),
   }))
 
   // Extract relations
-  const relations = extractRelationsFromModels(datamodel.models)
+  const relations = extractRelationsFromModels([...datamodel.models])
 
   return {
     name: 'Database Schema',
@@ -43,8 +43,8 @@ export function convertDMMFToTbls(datamodel: DMMF.Datamodel): TblsSchema {
     enums,
     driver: {
       name: 'prisma',
-      database_version: '1.0.0'
-    }
+      database_version: '1.0.0',
+    },
   }
 }
 
@@ -59,7 +59,9 @@ function getTableName(model: DMMF.Model): string {
  * Get column name from field
  */
 function getColumnName(field: DMMF.Field): string {
-  return (field as any).dbName || camelToSnakeCase(field.name)
+  // Type-safe access to dbName - it exists but isn't in DMMF types
+  const fieldWithDbName = field as DMMF.Field & { dbName?: string }
+  return fieldWithDbName.dbName || camelToSnakeCase(field.name)
 }
 
 /**
@@ -113,7 +115,8 @@ function getDefaultValue(field: DMMF.Field): string | null {
   // Handle different default value types
   if (typeof field.default === 'object' && field.default !== null) {
     // Function calls like autoincrement(), now(), etc.
-    return `${(field.default as any).name}()`
+    const defaultObj = field.default as { name: string }
+    return `${defaultObj.name}()`
   }
 
   if (typeof field.default === 'string') {
@@ -126,8 +129,8 @@ function getDefaultValue(field: DMMF.Field): string | null {
 /**
  * Generate constraints for a model
  */
-function generateConstraints(model: DMMF.Model): any[] {
-  const constraints: any[] = []
+function generateConstraints(model: DMMF.Model): Constraint[] {
+  const constraints: Constraint[] = []
   const tableName = getTableName(model)
 
   // Primary key constraints
@@ -137,7 +140,7 @@ function generateConstraints(model: DMMF.Model): any[] {
       type: 'PRIMARY KEY',
       def: `PRIMARY KEY (${model.primaryKey.fields.join(', ')})`,
       table: tableName,
-      columns: model.primaryKey.fields
+      columns: [...model.primaryKey.fields],
     })
   } else {
     // Find @id fields
@@ -148,7 +151,7 @@ function generateConstraints(model: DMMF.Model): any[] {
         type: 'PRIMARY KEY',
         def: `PRIMARY KEY (${idFields.map(f => getColumnName(f)).join(', ')})`,
         table: tableName,
-        columns: idFields.map(f => getColumnName(f))
+        columns: idFields.map(f => getColumnName(f)),
       })
     }
   }
@@ -162,18 +165,18 @@ function generateConstraints(model: DMMF.Model): any[] {
       type: 'UNIQUE',
       def: `UNIQUE (${columnName})`,
       table: tableName,
-      columns: [columnName]
+      columns: [columnName],
     })
   })
 
   // Unique field combinations
-  model.uniqueFields.forEach((uniqueFieldSet, index) => {
+  model.uniqueFields.forEach(uniqueFieldSet => {
     constraints.push({
       name: `${tableName}_${uniqueFieldSet.join('_')}_unique`,
       type: 'UNIQUE',
       def: `UNIQUE (${uniqueFieldSet.join(', ')})`,
       table: tableName,
-      columns: uniqueFieldSet
+      columns: [...uniqueFieldSet],
     })
   })
 
@@ -183,7 +186,7 @@ function generateConstraints(model: DMMF.Model): any[] {
 /**
  * Generate indexes for a model
  */
-function generateIndexes(model: DMMF.Model): any[] {
+function generateIndexes(_model: DMMF.Model): Index[] {
   // DMMF doesn't directly expose @@index information
   // Would need to parse from model attributes if available
   return []
@@ -192,17 +195,20 @@ function generateIndexes(model: DMMF.Model): any[] {
 /**
  * Extract relations from models
  */
-function extractRelationsFromModels(models: DMMF.Model[]): any[] {
-  const relations: any[] = []
+function extractRelationsFromModels(models: DMMF.Model[]): Relation[] {
+  const relations: Relation[] = []
 
   for (const model of models) {
     const relationFields = model.fields.filter(field => field.kind === 'object')
 
     for (const field of relationFields) {
       // Only process fields that have actual foreign key relations
-      if (field.relationFromFields && field.relationFromFields.length > 0 &&
-          field.relationToFields && field.relationToFields.length > 0) {
-        
+      if (
+        field.relationFromFields &&
+        field.relationFromFields.length > 0 &&
+        field.relationToFields &&
+        field.relationToFields.length > 0
+      ) {
         const targetModel = models.find(m => m.name === field.type)
         if (!targetModel) continue
 
@@ -213,7 +219,7 @@ function extractRelationsFromModels(models: DMMF.Model[]): any[] {
           parent_table: getTableName(targetModel),
           parent_columns: field.relationToFields.map(f => camelToSnakeCase(f)),
           parent_cardinality: 'exactly_one', // Default assumption
-          def: `FOREIGN KEY (${field.relationFromFields.join(', ')}) REFERENCES ${getTableName(targetModel)}(${field.relationToFields.join(', ')})`
+          def: `FOREIGN KEY (${field.relationFromFields.join(', ')}) REFERENCES ${getTableName(targetModel)}(${field.relationToFields.join(', ')})`,
         })
       }
     }
@@ -225,15 +231,17 @@ function extractRelationsFromModels(models: DMMF.Model[]): any[] {
 /**
  * Determine cardinality from field
  */
-function determineCardinality(field: DMMF.Field): 'zero_or_one' | 'exactly_one' | 'zero_or_more' | 'one_or_more' {
+function determineCardinality(
+  field: DMMF.Field
+): 'zero_or_one' | 'exactly_one' | 'zero_or_more' | 'one_or_more' {
   if (field.isList) {
     return 'zero_or_more'
   }
-  
+
   if (!field.isRequired) {
     return 'zero_or_one'
   }
-  
+
   return 'exactly_one'
 }
 
