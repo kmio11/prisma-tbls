@@ -4,11 +4,13 @@ import type { TblsSchema } from './types/tbls.js'
 
 /**
  * Main entry point for converting Prisma schema to tbls JSON format
+ * For standalone CLI usage, we use the custom parser for now.
+ * For generator usage, use the DMMF converter directly.
  * @param prismaSchemaContent - The Prisma schema file content as string
  * @returns Promise<TblsSchema> - The converted tbls JSON schema
  */
 export async function convertPrismaToTbls(prismaSchemaContent: string): Promise<TblsSchema> {
-  // Parse the Prisma schema
+  // Use custom parser for standalone CLI
   const prismaAst = parsePrismaSchema(prismaSchemaContent)
   
   // Convert to tbls format

@@ -1,0 +1,65 @@
+{
+  "name": "Database Schema",
+  "desc": "Generated from Prisma schema",
+  "tables": [
+    {
+      "name": "user",
+      "type": "table",
+      "columns": [
+        {
+          "name": "id",
+          "type": "INTEGER",
+          "nullable": false,
+          "default": "autoincrement()"
+        },
+        {
+          "name": "email",
+          "type": "VARCHAR",
+          "nullable": false,
+          "default": null
+        },
+        {
+          "name": "name",
+          "type": "VARCHAR",
+          "nullable": true,
+          "default": null
+        }
+      ],
+      "constraints": [
+        {
+          "name": "user_pkey",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (id)",
+          "table": "user",
+          "columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "user_email_unique",
+          "type": "UNIQUE",
+          "def": "UNIQUE (email)",
+          "table": "user",
+          "columns": [
+            "email"
+          ]
+        }
+      ],
+      "indexes": []
+    }
+  ],
+  "relations": [],
+  "enums": [
+    {
+      "name": "status",
+      "values": [
+        "DRAFT",
+        "PUBLISHED"
+      ]
+    }
+  ],
+  "driver": {
+    "name": "prisma",
+    "database_version": "1.0.0"
+  }
+}
