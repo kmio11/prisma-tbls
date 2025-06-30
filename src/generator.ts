@@ -1,4 +1,5 @@
-import { generatorHandler } from '@prisma/generator-helper'
+import pkg from '@prisma/generator-helper'
+const { generatorHandler } = pkg
 import { writeFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
 import { createRequire } from 'node:module'
