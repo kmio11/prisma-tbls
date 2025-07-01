@@ -5,70 +5,70 @@
     {
       "name": "users",
       "type": "table",
-      "comment": "",
+      "comment": "User management with various constraints\nStores user account information including authentication details",
       "columns": [
         {
           "name": "id",
           "type": "INTEGER",
           "nullable": false,
           "default": "autoincrement()",
-          "comment": ""
+          "comment": "Primary key for user identification"
         },
         {
           "name": "email",
           "type": "VARCHAR",
           "nullable": false,
           "default": null,
-          "comment": ""
+          "comment": "User email address for login and notifications"
         },
         {
           "name": "user_name",
           "type": "VARCHAR",
           "nullable": false,
           "default": null,
-          "comment": ""
+          "comment": "Display name visible to other users"
         },
         {
           "name": "first_name",
           "type": "VARCHAR",
           "nullable": true,
           "default": null,
-          "comment": ""
+          "comment": "User's first name (optional)"
         },
         {
           "name": "last_name",
           "type": "VARCHAR",
           "nullable": true,
           "default": null,
-          "comment": ""
+          "comment": "User's last name (optional)"
         },
         {
           "name": "date_of_birth",
           "type": "DATETIME",
           "nullable": true,
           "default": null,
-          "comment": ""
+          "comment": "User's birth date for age verification"
         },
         {
           "name": "is_active",
           "type": "BOOLEAN",
           "nullable": false,
           "default": "true",
-          "comment": ""
+          "comment": "Account status flag for access control"
         },
         {
           "name": "created_at",
           "type": "DATETIME",
           "nullable": false,
           "default": "now()",
-          "comment": ""
+          "comment": "Account creation timestamp"
         },
         {
           "name": "updated_at",
           "type": "DATETIME",
           "nullable": false,
           "default": null,
-          "comment": ""
+          "comment": "Last profile update timestamp"
         }
       ],
       "constraints": [
@@ -115,7 +115,7 @@
     {
       "name": "user_profiles",
       "type": "table",
-      "comment": "",
+      "comment": "One-to-one relationship for extended user information\nStores additional profile data not required for authentication",
       "columns": [
         {
           "name": "id",
@@ -185,7 +185,7 @@
     {
       "name": "categories",
       "type": "table",
-      "comment": "",
+      "comment": "Content categorization system\nHierarchical category structure for organizing posts",
       "columns": [
         {
           "name": "id",
@@ -264,84 +264,84 @@
     {
       "name": "posts",
       "type": "table",
-      "comment": "",
+      "comment": "Blog post content management\nSupports drafts, publishing, and archiving with author attribution",
       "columns": [
         {
           "name": "id",
           "type": "INTEGER",
           "nullable": false,
           "default": "autoincrement()",
-          "comment": ""
+          "comment": "Unique post identifier"
         },
         {
           "name": "title",
           "type": "VARCHAR",
           "nullable": false,
           "default": null,
-          "comment": ""
+          "comment": "Post title displayed in listings and detail view"
         },
         {
           "name": "slug",
           "type": "VARCHAR",
           "nullable": false,
           "default": null,
-          "comment": ""
+          "comment": "URL-friendly post identifier for SEO"
         },
         {
           "name": "content",
           "type": "VARCHAR",
           "nullable": true,
           "default": null,
-          "comment": ""
+          "comment": "Main post content in markdown format"
         },
         {
           "name": "excerpt",
           "type": "VARCHAR",
           "nullable": true,
           "default": null,
-          "comment": ""
+          "comment": "Short summary for post previews"
         },
         {
           "name": "status",
           "type": "PostStatus",
           "nullable": false,
           "default": "'DRAFT'",
-          "comment": ""
+          "comment": "Publication status for content workflow"
         },
         {
           "name": "published_at",
           "type": "DATETIME",
           "nullable": true,
           "default": null,
-          "comment": ""
+          "comment": "Timestamp when post was published"
         },
         {
           "name": "author_id",
           "type": "INTEGER",
           "nullable": false,
           "default": null,
-          "comment": ""
+          "comment": "Author reference for content attribution"
         },
         {
           "name": "view_count",
           "type": "INTEGER",
           "nullable": false,
           "default": null,
-          "comment": ""
+          "comment": "Number of times post has been viewed"
         },
         {
           "name": "created_at",
           "type": "DATETIME",
           "nullable": false,
           "default": "now()",
-          "comment": ""
+          "comment": "Post creation timestamp"
         },
         {
           "name": "updated_at",
           "type": "DATETIME",
           "nullable": false,
           "default": null,
-          "comment": ""
+          "comment": "Last modification timestamp"
         }
       ],
       "constraints": [

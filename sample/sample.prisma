@@ -8,16 +8,26 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// User management with various constraints
+/// User management with various constraints
+/// Stores user account information including authentication details
 model User {
+  /// Primary key for user identification
   id          Int       @id @default(autoincrement())
+  /// User email address for login and notifications
   email       String    @unique @db.VarChar(255)
+  /// Display name visible to other users
   username    String    @unique @db.VarChar(50) @map("user_name")
+  /// User's first name (optional)
   firstName   String?   @db.VarChar(100) @map("first_name")
+  /// User's last name (optional)
   lastName    String?   @db.VarChar(100) @map("last_name")
+  /// User's birth date for age verification
   dateOfBirth DateTime? @map("date_of_birth") @db.Date
+  /// Account status flag for access control
   isActive    Boolean   @default(true) @map("is_active")
+  /// Account creation timestamp
   createdAt   DateTime  @default(now()) @map("created_at")
+  /// Last profile update timestamp
   updatedAt   DateTime  @updatedAt @map("updated_at")
   
   // Relations
@@ -35,7 +45,8 @@ model User {
   @@map("users")
 }
 
-// One-to-one relationship
+/// One-to-one relationship for extended user information
+/// Stores additional profile data not required for authentication
 model UserProfile {
   id        Int     @id @default(autoincrement())
   userId    Int     @unique @map("user_id")
@@ -49,7 +60,8 @@ model UserProfile {
   @@map("user_profiles")
 }
 
-// Content management
+/// Content categorization system
+/// Hierarchical category structure for organizing posts
 model Category {
   id          Int         @id @default(autoincrement())
   name        String      @unique @db.VarChar(100)
@@ -66,17 +78,30 @@ model Category {
   @@map("categories")
 }
 
+/// Blog post content management
+/// Supports drafts, publishing, and archiving with author attribution
 model Post {
+  /// Unique post identifier
   id          Int       @id @default(autoincrement())
+  /// Post title displayed in listings and detail view
   title       String    @db.VarChar(255)
+  /// URL-friendly post identifier for SEO
   slug        String    @unique @db.VarChar(255)
+  /// Main post content in markdown format
   content     String?   @db.Text
+  /// Short summary for post previews
   excerpt     String?   @db.VarChar(500)
+  /// Publication status for content workflow
   status      PostStatus @default(DRAFT)
+  /// Timestamp when post was published
   publishedAt DateTime? @map("published_at")
+  /// Author reference for content attribution
   authorId    Int       @map("author_id")
+  /// Number of times post has been viewed
   viewCount   Int       @default(0) @map("view_count")
+  /// Post creation timestamp
   createdAt   DateTime  @default(now()) @map("created_at")
+  /// Last modification timestamp
   updatedAt   DateTime  @updatedAt @map("updated_at")
   
   // Relations
@@ -223,14 +248,21 @@ model FileUpload {
   @@map("file_uploads")
 }
 
-// Enums
+/// Content publication status enumeration
+/// Controls post visibility and workflow management
 enum PostStatus {
+  /// Content in development, not visible to public
   DRAFT
+  /// Content reviewed and visible to public
   PUBLISHED
+  /// Content hidden but preserved for reference
   ARCHIVED
+  /// Content marked for deletion
   DELETED
 }
 
+/// Configuration value type enumeration
+/// Defines supported data types for system configuration values
 enum ConfigType {
   STRING
   NUMBER
