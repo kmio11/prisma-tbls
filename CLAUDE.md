@@ -67,9 +67,13 @@ npm run typecheck
 ## Testing Strategy
 
 - **Integration Tests**: Full schema conversion tests
-- **Unit Tests**: Individual converter components
+- **Unit Tests**: Individual converter components.
 - **Reference Schemas**: Simple and complex test cases
 - **Sample Documentation**: Comprehensive real-world schema example
+
+### Unit tests
+- Use `vitest` for unit tests
+- `*.test.ts` files in the same directory as the code being tested.
 
 ## Quality Gates
 

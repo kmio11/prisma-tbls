@@ -1,33 +1,28 @@
 # prisma-tbls
 
-Convert Prisma schema to tbls JSON format for database documentation generation.
+Generate beautiful database documentation from your Prisma schema using [tbls](https://github.com/k1LoW/tbls).
 
-## Features
+This Prisma generator automatically converts your Prisma schema to tbls JSON format, allowing you to create comprehensive database documentation with diagrams, tables, and relationship visualization.
 
-- ✅ Convert Prisma models to tbls tables with columns, constraints, and indexes
-- ✅ Extract relations and foreign keys from Prisma schema
-- ✅ Convert Prisma enums to tbls enums
-- ✅ Support for @id, @unique, @default, @map attributes
-- ✅ Automatic snake_case conversion for table/column names
-- ✅ Official Prisma DMMF integration for robust parsing
+## Quick Start
 
-## Installation
+### 1. Install the generator
 
 ```bash
 npm install prisma-tbls
 ```
 
-## Usage
+### 2. Add the generator to your schema
 
-### Prisma Generator
-Add the generator to your `schema.prisma`:
+Add this to your `schema.prisma` file:
 
 ```prisma
 generator tbls {
-  provider = "prisma-tbls-generator"
-  output   = "./schema.json"
+  provider = "prisma-tbls-generator" 
+  output   = "./docs/schema.json"
 }
 
+// Your existing datasource and models
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -49,11 +44,34 @@ model Post {
 }
 ```
 
-Then run:
+### 3. Generate the documentation schema
 
 ```bash
 npx prisma generate
 ```
+
+This creates a `docs/schema.json` file compatible with tbls.
+
+### 4. Create documentation with tbls
+
+Install tbls following the [tbls installation guide](https://github.com/k1LoW/tbls), then generate your documentation:
+
+```bash
+# Generate HTML documentation
+tbls doc json://docs/schema.json
+```
+
+The `json://` prefix tells tbls to use the file as a JSON Datasource, allowing you to generate documentation without connecting to a live database.
+
+## Examples
+
+See the [sample/](sample/) directory for a comprehensive example with:
+- Complex Prisma schema demonstrating all features
+- Generated tbls JSON output
+- Complete documentation generated with tbls
+
+A sample tbls configuration is provided in [tbls.sample.yaml](tbls.sample.yaml), which uses the generated JSON file as a datasource.
+For complete tbls documentation, visit [tbls documentation](https://github.com/k1LoW/tbls).
 
 ## Output Format
 
@@ -122,40 +140,3 @@ The tool generates tbls-compatible JSON that can be used with [tbls](https://git
 - ✅ Many-to-many relations
 - ✅ Self-referential relations
 - ✅ Cardinality detection
-
-## Integration with tbls
-
-Use the generated JSON with tbls to create documentation:
-
-```bash
-# Generate documentation from JSON
-tbls doc json://path/to/schema.json
-```
-
-### tbls Configuration
-
-Sample tbls configuration is provided in [tbls.sample.yaml](tbls.sample.yaml).  
-For detailed usage, refer to the [tbls documentation](https://github.com/k1LoW/tbls).
-
-## Development
-
-```bash
-# Install dependencies
-npm install
-
-# Build
-npm run build
-
-# Test
-npm test
-
-# Format code
-npm run format
-
-# Lint
-npm run lint
-```
-
-## License
-
-MIT
