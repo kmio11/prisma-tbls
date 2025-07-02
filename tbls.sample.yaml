@@ -1,0 +1,11 @@
+Name: prisma-tbls-sample
+dsn: json://./sample/generated-schema.json
+docPath: sample/doc
+
+viewpoints:
+  - name: comments on post
+    desc: Users can comment on each post multiple times and put a star on each comment.
+    tables:
+      - users
+      - posts
+      - comments

@@ -19,8 +19,7 @@ npm install prisma-tbls
 
 ## Usage
 
-### Prisma Generator (Recommended)
-
+### Prisma Generator
 Add the generator to your `schema.prisma`:
 
 ```prisma
@@ -54,19 +53,6 @@ Then run:
 
 ```bash
 npx prisma generate
-```
-
-### Programmatic Usage
-
-```typescript
-import { convertDMMFToTblsJSON } from 'prisma-tbls'
-import type { DMMF } from '@prisma/generator-helper'
-
-// From generator context
-export const onGenerate = async (options: GeneratorOptions) => {
-  const tblsSchema = convertDMMFToTblsJSON(options.dmmf.datamodel)
-  // Write or process tblsSchema...
-}
 ```
 
 ## Output Format
@@ -142,12 +128,14 @@ The tool generates tbls-compatible JSON that can be used with [tbls](https://git
 Use the generated JSON with tbls to create documentation:
 
 ```bash
-# Generate documentation
-tbls doc --format=json --input=schema.json --output=docs/
-
-# Generate ER diagram
-tbls out --format=svg --input=schema.json --output=schema.svg
+# Generate documentation from JSON
+tbls doc json://path/to/schema.json
 ```
+
+### tbls Configuration
+
+Sample tbls configuration is provided in [tbls.sample.yaml](tbls.sample.yaml).  
+For detailed usage, refer to the [tbls documentation](https://github.com/k1LoW/tbls).
 
 ## Development
 

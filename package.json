@@ -5,7 +5,6 @@
   "type": "module",
   "main": "dist/index.js",
   "bin": {
-    "prisma-tbls": "dist/cli.js",
     "prisma-tbls-generator": "dist/generator.js"
   },
   "files": [
@@ -18,7 +17,9 @@
     "test:run": "vitest run",
     "lint": "eslint src --ext .ts",
     "format": "prettier --write src",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "sample:prisma": "prisma generate --schema ./sample/sample.prisma",
+    "sample:tbls": "go tool tbls doc --config ./tbls.sample.yaml -f"
   },
   "keywords": [
     "prisma",

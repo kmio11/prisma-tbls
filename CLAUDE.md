@@ -69,7 +69,7 @@ npm run typecheck
 - **Integration Tests**: Full schema conversion tests
 - **Unit Tests**: Individual converter components
 - **Reference Schemas**: Simple and complex test cases
-- **CLI Testing**: Command-line interface validation
+- **Sample Documentation**: Comprehensive real-world schema example
 
 ## Quality Gates
 
@@ -105,6 +105,8 @@ All commits must pass:
 - **Official Tools**: Use only Prisma official packages for parsing
 - **DMMF-First**: All schema parsing goes through official DMMF
 - **Single Source**: No custom parsers or fallback implementations
+- **Go Integration**: Use Go toolchain for tbls dependency management
+- **Sample-Driven**: Maintain comprehensive sample documentation
 
 ## Development Loop
 
