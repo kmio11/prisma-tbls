@@ -5,7 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Project Overview
 
 This project is a **Prisma to tbls JSON converter** that uses official Prisma tools for schema parsing. It provides two usage modes:
-1. **Standalone CLI tool**: `prisma-tbls schema.prisma -o output.json`
+1. **Standalone CLI tool**: `npx prisma-tbls --schema schema.prisma --out output.json`
 2. **Prisma Generator**: Add to schema.prisma and run `prisma generate`
 
 The tool converts Prisma schema files to [tbls](https://github.com/k1LoW/tbls) JSON format for database documentation generation.
@@ -47,6 +47,14 @@ npm run format
 
 # Type checking
 npm run typecheck
+
+# Test CLI locally
+npm run build
+./dist/cli.js --schema sample/sample.prisma --out test.json
+
+# Test with npm link for global install
+npm link
+prisma-tbls --schema schema.prisma --out output.json
 ```
 
 ## Implementation Approach

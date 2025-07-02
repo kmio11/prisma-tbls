@@ -5,6 +5,7 @@
   "type": "module",
   "main": "dist/index.js",
   "bin": {
+    "prisma-tbls": "dist/cli.js",
     "prisma-tbls-generator": "dist/generator.js"
   },
   "files": [
@@ -13,7 +14,7 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "test": "vitest",
+    "test": "vitest run",
     "test:run": "vitest run",
     "lint": "eslint src --ext .ts",
     "format": "prettier --write src",
@@ -33,6 +34,7 @@
   "license": "MIT",
   "dependencies": {
     "@prisma/generator-helper": "^6.10.1",
+    "@prisma/internals": "^6.10.1",
     "commander": "^12.0.0"
   },
   "devDependencies": {
