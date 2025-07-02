@@ -27,6 +27,13 @@
 | ---- | ---- | ---------- |
 | comments_pkey | PRIMARY KEY | PRIMARY KEY (id) |
 
+## Indexes
+
+| Name | Definition |
+| ---- | ---------- |
+| comments_id_idx | CREATE INDEX comments_id_idx ON comments (id) |
+| comments_post_id_created_at_idx | CREATE INDEX comments_post_id_created_at_idx ON comments (post_id, created_at) |
+
 ## Relations
 
 ![er](comments.svg)

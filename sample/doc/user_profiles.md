@@ -23,6 +23,13 @@ Stores additional profile data not required for authentication
 | user_profiles_pkey | PRIMARY KEY | PRIMARY KEY (id) |
 | user_profiles_user_id_unique | UNIQUE | UNIQUE (user_id) |
 
+## Indexes
+
+| Name | Definition | Comment |
+| ---- | ---------- | ------- |
+| user_profiles_id_idx | CREATE INDEX user_profiles_id_idx ON user_profiles (id) |  |
+| user_profiles_user_id_idx | CREATE INDEX user_profiles_user_id_idx ON user_profiles (user_id) | Unique index |
+
 ## Relations
 
 ![er](user_profiles.svg)

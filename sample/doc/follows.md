@@ -17,6 +17,13 @@
 | follows_pkey | PRIMARY KEY | PRIMARY KEY (followerId, followingId) |
 | follows_followerId_followingId_unique | UNIQUE | UNIQUE (followerId, followingId) |
 
+## Indexes
+
+| Name | Definition | Comment |
+| ---- | ---------- | ------- |
+| follows_follower_id_following_id_idx | CREATE INDEX follows_follower_id_following_id_idx ON follows (follower_id, following_id) |  |
+| follows_follower_id_following_id_idx | CREATE INDEX follows_follower_id_following_id_idx ON follows (follower_id, following_id) | Unique index |
+
 ## Relations
 
 ![er](follows.svg)

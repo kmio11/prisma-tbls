@@ -110,7 +110,55 @@
           ]
         }
       ],
-      "indexes": []
+      "indexes": [
+        {
+          "name": "users_id_idx",
+          "def": "CREATE INDEX users_id_idx ON users (id)",
+          "table": "users",
+          "columns": [
+            "id"
+          ],
+          "comment": ""
+        },
+        {
+          "name": "users_email_idx",
+          "def": "CREATE INDEX users_email_idx ON users (email)",
+          "table": "users",
+          "columns": [
+            "email"
+          ],
+          "comment": "Unique index"
+        },
+        {
+          "name": "users_username_idx",
+          "def": "CREATE INDEX users_username_idx ON users (username)",
+          "table": "users",
+          "columns": [
+            "username"
+          ],
+          "comment": "Unique index"
+        },
+        {
+          "name": "users_email_is_active_idx",
+          "def": "CREATE INDEX users_email_is_active_idx ON users (email, is_active)",
+          "table": "users",
+          "columns": [
+            "email",
+            "is_active"
+          ],
+          "comment": ""
+        },
+        {
+          "name": "users_first_name_last_name_idx",
+          "def": "CREATE INDEX users_first_name_last_name_idx ON users (first_name, last_name)",
+          "table": "users",
+          "columns": [
+            "first_name",
+            "last_name"
+          ],
+          "comment": "Unique index"
+        }
+      ]
     },
     {
       "name": "user_profiles",
@@ -180,7 +228,26 @@
           ]
         }
       ],
-      "indexes": []
+      "indexes": [
+        {
+          "name": "user_profiles_id_idx",
+          "def": "CREATE INDEX user_profiles_id_idx ON user_profiles (id)",
+          "table": "user_profiles",
+          "columns": [
+            "id"
+          ],
+          "comment": ""
+        },
+        {
+          "name": "user_profiles_user_id_idx",
+          "def": "CREATE INDEX user_profiles_user_id_idx ON user_profiles (user_id)",
+          "table": "user_profiles",
+          "columns": [
+            "user_id"
+          ],
+          "comment": "Unique index"
+        }
+      ]
     },
     {
       "name": "categories",
@@ -259,7 +326,35 @@
           ]
         }
       ],
-      "indexes": []
+      "indexes": [
+        {
+          "name": "categories_id_idx",
+          "def": "CREATE INDEX categories_id_idx ON categories (id)",
+          "table": "categories",
+          "columns": [
+            "id"
+          ],
+          "comment": ""
+        },
+        {
+          "name": "categories_name_idx",
+          "def": "CREATE INDEX categories_name_idx ON categories (name)",
+          "table": "categories",
+          "columns": [
+            "name"
+          ],
+          "comment": "Unique index"
+        },
+        {
+          "name": "categories_slug_idx",
+          "def": "CREATE INDEX categories_slug_idx ON categories (slug)",
+          "table": "categories",
+          "columns": [
+            "slug"
+          ],
+          "comment": "Unique index"
+        }
+      ]
     },
     {
       "name": "posts",
@@ -364,7 +459,46 @@
           ]
         }
       ],
-      "indexes": []
+      "indexes": [
+        {
+          "name": "posts_id_idx",
+          "def": "CREATE INDEX posts_id_idx ON posts (id)",
+          "table": "posts",
+          "columns": [
+            "id"
+          ],
+          "comment": ""
+        },
+        {
+          "name": "posts_slug_idx",
+          "def": "CREATE INDEX posts_slug_idx ON posts (slug)",
+          "table": "posts",
+          "columns": [
+            "slug"
+          ],
+          "comment": "Unique index"
+        },
+        {
+          "name": "posts_status_published_at_idx",
+          "def": "CREATE INDEX posts_status_published_at_idx ON posts (status, published_at)",
+          "table": "posts",
+          "columns": [
+            "status",
+            "published_at"
+          ],
+          "comment": ""
+        },
+        {
+          "name": "posts_author_id_created_at_idx",
+          "def": "CREATE INDEX posts_author_id_created_at_idx ON posts (author_id, created_at)",
+          "table": "posts",
+          "columns": [
+            "author_id",
+            "created_at"
+          ],
+          "comment": ""
+        }
+      ]
     },
     {
       "name": "post_categories",
@@ -412,7 +546,18 @@
           ]
         }
       ],
-      "indexes": []
+      "indexes": [
+        {
+          "name": "post_categories_post_id_category_id_idx",
+          "def": "CREATE INDEX post_categories_post_id_category_id_idx ON post_categories (post_id, category_id)",
+          "table": "post_categories",
+          "columns": [
+            "post_id",
+            "category_id"
+          ],
+          "comment": ""
+        }
+      ]
     },
     {
       "name": "tags",
@@ -468,7 +613,26 @@
           ]
         }
       ],
-      "indexes": []
+      "indexes": [
+        {
+          "name": "tags_id_idx",
+          "def": "CREATE INDEX tags_id_idx ON tags (id)",
+          "table": "tags",
+          "columns": [
+            "id"
+          ],
+          "comment": ""
+        },
+        {
+          "name": "tags_name_idx",
+          "def": "CREATE INDEX tags_name_idx ON tags (name)",
+          "table": "tags",
+          "columns": [
+            "name"
+          ],
+          "comment": "Unique index"
+        }
+      ]
     },
     {
       "name": "post_tags",
@@ -502,7 +666,18 @@
           ]
         }
       ],
-      "indexes": []
+      "indexes": [
+        {
+          "name": "post_tags_post_id_tag_id_idx",
+          "def": "CREATE INDEX post_tags_post_id_tag_id_idx ON post_tags (post_id, tag_id)",
+          "table": "post_tags",
+          "columns": [
+            "post_id",
+            "tag_id"
+          ],
+          "comment": ""
+        }
+      ]
     },
     {
       "name": "comments",
@@ -577,7 +752,27 @@
           ]
         }
       ],
-      "indexes": []
+      "indexes": [
+        {
+          "name": "comments_id_idx",
+          "def": "CREATE INDEX comments_id_idx ON comments (id)",
+          "table": "comments",
+          "columns": [
+            "id"
+          ],
+          "comment": ""
+        },
+        {
+          "name": "comments_post_id_created_at_idx",
+          "def": "CREATE INDEX comments_post_id_created_at_idx ON comments (post_id, created_at)",
+          "table": "comments",
+          "columns": [
+            "post_id",
+            "created_at"
+          ],
+          "comment": ""
+        }
+      ]
     },
     {
       "name": "post_likes",
@@ -618,7 +813,18 @@
           ]
         }
       ],
-      "indexes": []
+      "indexes": [
+        {
+          "name": "post_likes_user_id_post_id_idx",
+          "def": "CREATE INDEX post_likes_user_id_post_id_idx ON post_likes (user_id, post_id)",
+          "table": "post_likes",
+          "columns": [
+            "user_id",
+            "post_id"
+          ],
+          "comment": ""
+        }
+      ]
     },
     {
       "name": "follows",
@@ -669,7 +875,28 @@
           ]
         }
       ],
-      "indexes": []
+      "indexes": [
+        {
+          "name": "follows_follower_id_following_id_idx",
+          "def": "CREATE INDEX follows_follower_id_following_id_idx ON follows (follower_id, following_id)",
+          "table": "follows",
+          "columns": [
+            "follower_id",
+            "following_id"
+          ],
+          "comment": ""
+        },
+        {
+          "name": "follows_follower_id_following_id_idx",
+          "def": "CREATE INDEX follows_follower_id_following_id_idx ON follows (follower_id, following_id)",
+          "table": "follows",
+          "columns": [
+            "follower_id",
+            "following_id"
+          ],
+          "comment": "Unique index"
+        }
+      ]
     },
     {
       "name": "audit_logs",
@@ -744,7 +971,37 @@
           ]
         }
       ],
-      "indexes": []
+      "indexes": [
+        {
+          "name": "audit_logs_id_idx",
+          "def": "CREATE INDEX audit_logs_id_idx ON audit_logs (id)",
+          "table": "audit_logs",
+          "columns": [
+            "id"
+          ],
+          "comment": ""
+        },
+        {
+          "name": "audit_logs_table_name_record_id_idx",
+          "def": "CREATE INDEX audit_logs_table_name_record_id_idx ON audit_logs (table_name, record_id)",
+          "table": "audit_logs",
+          "columns": [
+            "table_name",
+            "record_id"
+          ],
+          "comment": ""
+        },
+        {
+          "name": "audit_logs_user_id_timestamp_idx",
+          "def": "CREATE INDEX audit_logs_user_id_timestamp_idx ON audit_logs (user_id, timestamp)",
+          "table": "audit_logs",
+          "columns": [
+            "user_id",
+            "timestamp"
+          ],
+          "comment": ""
+        }
+      ]
     },
     {
       "name": "system_configs",
@@ -821,7 +1078,26 @@
           ]
         }
       ],
-      "indexes": []
+      "indexes": [
+        {
+          "name": "system_configs_id_idx",
+          "def": "CREATE INDEX system_configs_id_idx ON system_configs (id)",
+          "table": "system_configs",
+          "columns": [
+            "id"
+          ],
+          "comment": ""
+        },
+        {
+          "name": "system_configs_key_idx",
+          "def": "CREATE INDEX system_configs_key_idx ON system_configs (key)",
+          "table": "system_configs",
+          "columns": [
+            "key"
+          ],
+          "comment": "Unique index"
+        }
+      ]
     },
     {
       "name": "file_uploads",
@@ -896,7 +1172,36 @@
           ]
         }
       ],
-      "indexes": []
+      "indexes": [
+        {
+          "name": "file_uploads_id_idx",
+          "def": "CREATE INDEX file_uploads_id_idx ON file_uploads (id)",
+          "table": "file_uploads",
+          "columns": [
+            "id"
+          ],
+          "comment": ""
+        },
+        {
+          "name": "file_uploads_mime_type_idx",
+          "def": "CREATE INDEX file_uploads_mime_type_idx ON file_uploads (mime_type)",
+          "table": "file_uploads",
+          "columns": [
+            "mime_type"
+          ],
+          "comment": ""
+        },
+        {
+          "name": "file_uploads_uploaded_by_uploaded_at_idx",
+          "def": "CREATE INDEX file_uploads_uploaded_by_uploaded_at_idx ON file_uploads (uploaded_by, uploaded_at)",
+          "table": "file_uploads",
+          "columns": [
+            "uploaded_by",
+            "uploaded_at"
+          ],
+          "comment": ""
+        }
+      ]
     }
   ],
   "relations": [

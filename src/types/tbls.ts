@@ -63,13 +63,15 @@ export interface Trigger {
   comment?: string
 }
 
+export type Cardinality = 'zero_or_one' | 'exactly_one' | 'zero_or_more' | 'one_or_more' | ''
+
 export interface Relation {
   table: string
   columns: string[]
-  cardinality?: 'zero_or_one' | 'exactly_one' | 'zero_or_more' | 'one_or_more' | ''
+  cardinality?: Cardinality
   parent_table: string
   parent_columns: string[]
-  parent_cardinality?: 'zero_or_one' | 'exactly_one' | 'zero_or_more' | 'one_or_more' | ''
+  parent_cardinality?: Cardinality
   def: string
   virtual?: boolean
 }

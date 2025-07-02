@@ -17,6 +17,12 @@
 | ---- | ---- | ---------- |
 | post_categories_pkey | PRIMARY KEY | PRIMARY KEY (postId, categoryId) |
 
+## Indexes
+
+| Name | Definition |
+| ---- | ---------- |
+| post_categories_post_id_category_id_idx | CREATE INDEX post_categories_post_id_category_id_idx ON post_categories (post_id, category_id) |
+
 ## Relations
 
 ![er](post_categories.svg)

@@ -15,6 +15,12 @@
 | ---- | ---- | ---------- |
 | post_tags_pkey | PRIMARY KEY | PRIMARY KEY (postId, tagId) |
 
+## Indexes
+
+| Name | Definition |
+| ---- | ---------- |
+| post_tags_post_id_tag_id_idx | CREATE INDEX post_tags_post_id_tag_id_idx ON post_tags (post_id, tag_id) |
+
 ## Relations
 
 ![er](post_tags.svg)

@@ -34,6 +34,15 @@ Supports drafts, publishing, and archiving with author attribution
 | posts_pkey | PRIMARY KEY | PRIMARY KEY (id) |
 | posts_slug_unique | UNIQUE | UNIQUE (slug) |
 
+## Indexes
+
+| Name | Definition | Comment |
+| ---- | ---------- | ------- |
+| posts_id_idx | CREATE INDEX posts_id_idx ON posts (id) |  |
+| posts_slug_idx | CREATE INDEX posts_slug_idx ON posts (slug) | Unique index |
+| posts_status_published_at_idx | CREATE INDEX posts_status_published_at_idx ON posts (status, published_at) |  |
+| posts_author_id_created_at_idx | CREATE INDEX posts_author_id_created_at_idx ON posts (author_id, created_at) |  |
+
 ## Relations
 
 ![er](posts.svg)

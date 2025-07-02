@@ -21,6 +21,14 @@
 | ---- | ---- | ---------- |
 | audit_logs_pkey | PRIMARY KEY | PRIMARY KEY (id) |
 
+## Indexes
+
+| Name | Definition |
+| ---- | ---------- |
+| audit_logs_id_idx | CREATE INDEX audit_logs_id_idx ON audit_logs (id) |
+| audit_logs_table_name_record_id_idx | CREATE INDEX audit_logs_table_name_record_id_idx ON audit_logs (table_name, record_id) |
+| audit_logs_user_id_timestamp_idx | CREATE INDEX audit_logs_user_id_timestamp_idx ON audit_logs (user_id, timestamp) |
+
 ## Relations
 
 ![er](audit_logs.svg)

@@ -21,6 +21,13 @@
 | system_configs_pkey | PRIMARY KEY | PRIMARY KEY (id) |
 | system_configs_key_unique | UNIQUE | UNIQUE (key) |
 
+## Indexes
+
+| Name | Definition | Comment |
+| ---- | ---------- | ------- |
+| system_configs_id_idx | CREATE INDEX system_configs_id_idx ON system_configs (id) |  |
+| system_configs_key_idx | CREATE INDEX system_configs_key_idx ON system_configs (key) | Unique index |
+
 ## Relations
 
 ![er](system_configs.svg)

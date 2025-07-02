@@ -21,6 +21,14 @@
 | ---- | ---- | ---------- |
 | file_uploads_pkey | PRIMARY KEY | PRIMARY KEY (id) |
 
+## Indexes
+
+| Name | Definition |
+| ---- | ---------- |
+| file_uploads_id_idx | CREATE INDEX file_uploads_id_idx ON file_uploads (id) |
+| file_uploads_mime_type_idx | CREATE INDEX file_uploads_mime_type_idx ON file_uploads (mime_type) |
+| file_uploads_uploaded_by_uploaded_at_idx | CREATE INDEX file_uploads_uploaded_by_uploaded_at_idx ON file_uploads (uploaded_by, uploaded_at) |
+
 ## Relations
 
 ![er](file_uploads.svg)

@@ -16,6 +16,12 @@
 | ---- | ---- | ---------- |
 | post_likes_pkey | PRIMARY KEY | PRIMARY KEY (userId, postId) |
 
+## Indexes
+
+| Name | Definition |
+| ---- | ---------- |
+| post_likes_user_id_post_id_idx | CREATE INDEX post_likes_user_id_post_id_idx ON post_likes (user_id, post_id) |
+
 ## Relations
 
 ![er](post_likes.svg)

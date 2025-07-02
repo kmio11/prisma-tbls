@@ -61,6 +61,7 @@ describe('Comment conversion from DMMF to tbls', () => {
         },
       ],
       types: [],
+      indexes: [],
     }
 
     const result = convertDMMFToTblsJSON(mockDMMF)

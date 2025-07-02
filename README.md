@@ -41,6 +41,9 @@ model Post {
   content  String?
   authorId Int
   author   User   @relation(fields: [authorId], references: [id])
+  
+  @@index([authorId])
+  @@index([title, authorId])
 }
 ```
 
@@ -101,6 +104,15 @@ The tool generates tbls-compatible JSON that can be used with [tbls](https://git
           "table": "user",
           "columns": ["id"]
         }
+      ],
+      "indexes": [
+        {
+          "name": "post_author_id_idx",
+          "def": "CREATE INDEX post_author_id_idx ON post (author_id)",
+          "table": "post",
+          "columns": ["author_id"],
+          "comment": ""
+        }
       ]
     }
   ],
@@ -133,6 +145,13 @@ The tool generates tbls-compatible JSON that can be used with [tbls](https://git
 - ✅ @relation → Foreign key relations
 - ✅ @@id → Compound primary keys
 - ✅ @@unique → Unique field combinations
+- ✅ @@index → Database indexes
+
+### Indexes
+- ✅ @@index([field]) → Single field indexes
+- ✅ @@index([field1, field2]) → Composite indexes
+- ✅ Custom index names
+- ✅ Index definitions in tbls format
 
 ### Relations
 - ✅ One-to-one relations

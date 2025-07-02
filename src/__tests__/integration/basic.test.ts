@@ -61,6 +61,7 @@ describe('Basic DMMF to tbls conversion', () => {
         },
       ],
       types: [],
+      indexes: [],
     }
 
     const result = convertDMMFToTblsJSON(mockDMMF)
@@ -85,6 +86,7 @@ describe('Basic DMMF to tbls conversion', () => {
       models: [],
       enums: [],
       types: [],
+      indexes: [],
     }
 
     const result = convertDMMFToTblsJSON(emptyDMMF)

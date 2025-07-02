@@ -1,5 +1,5 @@
 import type { DMMF } from '@prisma/generator-helper'
-import type { TblsSchema, Constraint, Index, Relation } from '../types/tbls.js'
+import type { TblsSchema, Constraint, Index, Relation, Cardinality } from '../types/tbls.js'
 
 /**
  * Convert DMMF datamodel directly to tbls JSON format
@@ -23,7 +23,7 @@ export function convertDMMFToTbls(datamodel: DMMF.Datamodel): TblsSchema {
         comment: field.documentation ?? '',
       })),
     constraints: generateConstraints(model),
-    indexes: generateIndexes(model),
+    indexes: generateIndexes(model, datamodel.indexes),
   }))
 
   // Convert enums
@@ -184,12 +184,29 @@ function generateConstraints(model: DMMF.Model): Constraint[] {
 }
 
 /**
- * Generate indexes for a model
+ * Generate indexes for a model from datamodel-level index definitions
  */
-function generateIndexes(_model: DMMF.Model): Index[] {
-  // DMMF doesn't directly expose @@index information
-  // Would need to parse from model attributes if available
-  return []
+function generateIndexes(model: DMMF.Model, datamodelIndexes: readonly DMMF.Index[] = []): Index[] {
+  const indexes: Index[] = []
+  const tableName = getTableName(model)
+  
+  // Convert DMMF indexes to tbls format for this model
+  const modelIndexes = datamodelIndexes.filter(index => index.model === model.name)
+  
+  modelIndexes.forEach(dmmfIndex => {
+    const columnNames = dmmfIndex.fields.map(field => camelToSnakeCase(field.name))
+    const indexName = dmmfIndex.name || dmmfIndex.dbName || `${tableName}_${columnNames.join('_')}_idx`
+    
+    indexes.push({
+      name: indexName,
+      def: `CREATE INDEX ${indexName} ON ${tableName} (${columnNames.join(', ')})`,
+      table: tableName,
+      columns: columnNames,
+      comment: dmmfIndex.type === 'unique' ? 'Unique index' : '',
+    })
+  })
+  
+  return indexes
 }
 
 /**
@@ -233,7 +250,7 @@ function extractRelationsFromModels(models: DMMF.Model[]): Relation[] {
  */
 function determineCardinality(
   field: DMMF.Field
-): 'zero_or_one' | 'exactly_one' | 'zero_or_more' | 'one_or_more' {
+): Cardinality {
   if (field.isList) {
     return 'zero_or_more'
   }

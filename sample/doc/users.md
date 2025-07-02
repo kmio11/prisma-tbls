@@ -34,6 +34,16 @@ Stores user account information including authentication details
 | users_user_name_unique | UNIQUE | UNIQUE (user_name) |
 | users_firstName_lastName_unique | UNIQUE | UNIQUE (firstName, lastName) |
 
+## Indexes
+
+| Name | Definition | Comment |
+| ---- | ---------- | ------- |
+| users_id_idx | CREATE INDEX users_id_idx ON users (id) |  |
+| users_email_idx | CREATE INDEX users_email_idx ON users (email) | Unique index |
+| users_username_idx | CREATE INDEX users_username_idx ON users (username) | Unique index |
+| users_email_is_active_idx | CREATE INDEX users_email_is_active_idx ON users (email, is_active) |  |
+| users_first_name_last_name_idx | CREATE INDEX users_first_name_last_name_idx ON users (first_name, last_name) | Unique index |
+
 ## Relations
 
 ![er](users.svg)

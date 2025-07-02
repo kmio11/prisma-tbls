@@ -24,6 +24,14 @@ Hierarchical category structure for organizing posts
 | categories_name_unique | UNIQUE | UNIQUE (name) |
 | categories_slug_unique | UNIQUE | UNIQUE (slug) |
 
+## Indexes
+
+| Name | Definition | Comment |
+| ---- | ---------- | ------- |
+| categories_id_idx | CREATE INDEX categories_id_idx ON categories (id) |  |
+| categories_name_idx | CREATE INDEX categories_name_idx ON categories (name) | Unique index |
+| categories_slug_idx | CREATE INDEX categories_slug_idx ON categories (slug) | Unique index |
+
 ## Relations
 
 ![er](categories.svg)
